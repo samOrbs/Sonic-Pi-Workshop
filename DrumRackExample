@@ -1,0 +1,18 @@
+live_loop :onset do
+  g = 1
+  a = (ring 0,2,4,5).tick(:b4)
+  b = (ring 2,3,4).tick(:c8)
+  c = (ring 4,5,2).tick(:v9)
+  d = (ring 0,4,5,3).tick(:yf)
+  retrigger = (knit 1,16-4,4,4).tick(:d1)
+  off = (ring 0.8,0.9).tick(:jf)
+  off2 = (ring -0.125,0.125).tick(:f8)
+  callarr = [off2,g*0.5,g*0.25,g*off]
+  callarr2 = [off2,g*0.25,g*0.5,g*off]
+  
+  time_warp (knit callarr,3,callarr2,1).tick(:n) do
+    midi :c2+(line 0,16,steps:16)[(ring a,b,c,d).stretch(retrigger).tick(:a2)] if(spread 3,4).tick(:h)
+  end
+  
+  sleep g
+end
