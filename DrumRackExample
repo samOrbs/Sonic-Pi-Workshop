@@ -1,17 +1,41 @@
-live_loop :onset do
-  g = 1
-  a = (ring 0,2,4,5).tick(:b4)
-  b = (ring 2,3,4).tick(:c8)
-  c = (ring 4,5,2).tick(:v9)
-  d = (ring 0,4,5,3).tick(:yf)
-  retrigger = (knit 1,16-4,4,4).tick(:d1)
-  off = (ring 0.8,0.9).tick(:jf)
-  off2 = (ring -0.125,0.125).tick(:f8)
-  callarr = [off2,g*0.5,g*0.25,g*off]
-  callarr2 = [off2,g*0.25,g*0.5,g*off]
+
+#-- a pattern definition, to be used later...(ask me how it works if you really want to see me struggle)
+define :pattern do |pattern|
+  return pattern.ring.tick(:p1) == "x"
+end
+
+
+live_loop :midi do
   
-  time_warp (knit callarr,3,callarr2,1).tick(:n) do
-    midi :c2+(line 0,16,steps:16)[(ring a,b,c,d).stretch(retrigger).tick(:a2)] if(spread 3,4).tick(:h)
+  use_bpm :link # use the link bpm
+  
+  set_link_bpm! 160 # set the link bpm
+  
+  g = 1 # this is the sleep time, 1 is one beat per sleep
+  
+  #-- some sequences to populate
+  a = (ring 0).tick(:a0)
+  b = (ring 1).tick(:a1)
+  c = (ring 2).tick(:a2)
+  d = (ring 3).tick(:a3)
+  
+  #-- a retrigger sequence to populate
+  retrigger = (knit 1,1).tick(:a4)
+  
+  #-- some empty offsets to use in our time_warp
+  off = (ring 1).tick(:a5)
+  off2 = (ring 1).tick(:a6)
+  
+  #-- our arrays to pass to the time_warp
+  callarr = [0]
+  callarr2 = [0]
+  
+  #-- a time_warp with a knit to sequence the arrays
+  time_warp (knit callarr,3,callarr2,1).tick(:a7) do
+    
+    #-- the midi function that holds our sequencer, dont forget to set the channel, it can also become a sequence ;)
+    midi :c2+(line 0,16,steps:16)[(ring a,b,c,d).stretch(retrigger).tick(:a8)],channel:1 if pattern "x"
+    
   end
   
   sleep g
