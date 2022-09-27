@@ -1,0 +1,16 @@
+# Data Source: https://www.gw-openscience.org/eventapi/html/GWTC-3-confident/
+
+# Ruby csv library
+require 'csv'
+
+# Our data file, called data to be used below
+data = "DRAG CSV FILE HERE"
+
+# Our data table..
+table = CSV.parse(File.read(data), headers: true)
+
+# Our filter on the table, looking at the column name luminosity distancea
+x = table[1]["luminosity_distance"]
+
+# Print as a float
+puts(x.to_f)
